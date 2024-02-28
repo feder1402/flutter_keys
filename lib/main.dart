@@ -13,25 +13,16 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   List<Widget> tiles = [
-    StatelessNameTile(key: UniqueKey(), name: "Mitch"),
-    StatelessNameTile(key: UniqueKey(), name: "Sean"),
-    StatelessNameTile(key: UniqueKey(), name: "Gus"),
+    Expanded(child: StatelessNameTile(name: "Mitch")),
+    Expanded(child: StatelessNameTile(name: "Sean")),
+    Expanded(child: StatelessNameTile(name: "Gus")),
   ];
 
   @override
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
-          child: ReorderableListView(
+          child: Column(
             children: tiles,
-            onReorder: (int oldIndex, int newIndex) => setState(
-              () {
-                if (oldIndex < newIndex) {
-                  newIndex -= 1;
-                }
-                final Widget tile = tiles.removeAt(oldIndex);
-                tiles.insert(newIndex, tile);
-              },
-            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
