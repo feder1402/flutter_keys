@@ -22,6 +22,8 @@ class _MainAppState extends State<MainApp> {
     items = List.generate(
         10,
         (index) => Item(
+              // Uncomment the line below to solve the issue deleting items
+              //    key: UniqueKey(),
               index: index,
               onDeleteItem: deleteItem,
             ));
