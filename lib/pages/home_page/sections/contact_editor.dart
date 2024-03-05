@@ -88,4 +88,12 @@ class _ContactEditorState extends State<ContactEditor> {
       ageController.clear();
     }
   }
+
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    ageController.dispose();
+    super.dispose();
+  }
 }
