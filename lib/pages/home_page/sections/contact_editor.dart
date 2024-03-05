@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keys/components/input_fields/input_fields.dart';
+import 'package:flutter_keys/components/page_frame.dart';
 import 'package:flutter_keys/components/separator.dart';
 import 'package:flutter_keys/models/contact.dart';
 
@@ -18,6 +19,8 @@ class _ContactEditorState extends State<ContactEditor> {
   late TextEditingController lastNameController;
   late TextEditingController ageController;
 
+  final _contactForm = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -29,9 +32,10 @@ class _ContactEditorState extends State<ContactEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        padding: const EdgeInsets.all(10),
+    return PageFrame(
+      title: Text(widget.contact == null ? 'Add Contact' : 'Edit Contact'),
+      child: Form(
+        key: _contactForm,
         child: Column(
           children: [
             StringInputField(
@@ -56,24 +60,8 @@ class _ContactEditorState extends State<ContactEditor> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    String? firstName = firstNameController.text;
-                    String? lastName = lastNameController.text;
-                    int? age = int.tryParse(ageController.text) ?? 0;
-
-                    if (isValidContact(firstName, lastName, age)) {
-                      widget.onSave(Contact(
-                        firstName: firstName,
-                        lastName: lastName,
-                        age: age,
-                      ));
-
-                      firstNameController.clear();
-                      lastNameController.clear();
-                      ageController.clear();
-                    }
-                  },
-                  child: Text(widget.contact == null ? 'Save' : 'Update'),
+                  onPressed: save,
+                  child: Text(widget.contact == null ? 'Add' : 'Save'),
                 ),
               ],
             )
@@ -83,22 +71,21 @@ class _ContactEditorState extends State<ContactEditor> {
     );
   }
 
-  void saveContact([
-    String firstName = '',
-    String lastName = '',
-    int age = 0,
-  ]) {
-    setState(() {
+  void save() {
+    String? firstName = firstNameController.text;
+    String? lastName = lastNameController.text;
+    int? age = int.tryParse(ageController.text) ?? 0;
+
+    if (_contactForm.currentState?.validate() ?? false) {
+      widget.onSave(Contact(
+        firstName: firstName,
+        lastName: lastName,
+        age: age,
+      ));
+
       firstNameController.clear();
       lastNameController.clear();
       ageController.clear();
-    });
+    }
   }
-
-  bool isValidContact([
-    String firstName = '',
-    String lastName = '',
-    int age = 0,
-  ]) =>
-      firstName.isNotEmpty && lastName.isNotEmpty && age > 0;
 }

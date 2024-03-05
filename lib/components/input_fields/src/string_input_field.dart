@@ -16,8 +16,14 @@ class StringInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
+      validator: (inputValue) {
+        if (inputValue == null || inputValue.isEmpty) {
+          return "Please enter number";
+        }
+        return null;
+      },
       decoration: InputDecoration(
           hintText: hintText,
           border: const OutlineInputBorder(

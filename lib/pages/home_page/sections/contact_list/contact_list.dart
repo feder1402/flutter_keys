@@ -4,16 +4,33 @@ import 'package:flutter_keys/pages/home_page/sections/contact_list/contact_tile.
 
 class ContactList extends StatelessWidget {
   final List<Contact> contacts;
+  final void Function(int index) onDelete;
+  final void Function(int index) onEdit;
 
-  const ContactList({super.key, required this.contacts});
+  const ContactList({
+    super.key,
+    required this.contacts,
+    required this.onDelete,
+    required this.onEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemBuilder: (context, index) => ContactTile(
-        contact: contacts[index],
-      ),
+      itemBuilder: buildItemWidget,
       itemCount: contacts.length,
+    );
+  }
+
+  Widget buildItemWidget(BuildContext context, int index) {
+    return ContactTile(
+      contact: contacts[index],
+      onDelete: () {
+        onDelete(index);
+      },
+      onEdit: () {
+        onEdit(index);
+      },
     );
   }
 }
